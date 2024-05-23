@@ -15,3 +15,9 @@ namespace NZWalks.API.Data
         public DbSet<Walk> Walks { get; set; }
     }
 }
+
+/*
+    In Package Manager Console
+    cmd: Add-Migration "Migration Name"
+    cmd: Update-Database
+*/

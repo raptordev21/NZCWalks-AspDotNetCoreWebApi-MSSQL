@@ -22,5 +22,25 @@ namespace NZWalks.API.Controllers
 
             return Ok(regions);
         }
+
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public IActionResult GetById([FromRoute] Guid id) 
+        {
+            //var region = dbContext.Regions.Find(id);
+
+            var region = dbContext.Regions.FirstOrDefault(r => r.Id == id);
+
+            /*
+                Find(id) only takes primary key 
+                FirstOrDefault(r => r.Id == id) can compare with any value
+            */
+
+            if (region == null)
+            {
+                return NotFound();
+            }
+            return Ok(region);
+        }
     }
 }
