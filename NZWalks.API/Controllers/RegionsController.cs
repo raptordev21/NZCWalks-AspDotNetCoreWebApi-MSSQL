@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NZWalks.API.Data;
+using NZWalks.API.Models.DTO;
 
 namespace NZWalks.API.Controllers
 {
@@ -15,32 +16,62 @@ namespace NZWalks.API.Controllers
             this.dbContext = dbContext;
         }
 
+        // GET ALL REGIONS
+        // GET: https://localhost:port/api/regions
         [HttpGet]
         public IActionResult GetAll()
         {
-            var regions = dbContext.Regions.ToList();
+            // Get data from database - Domain models
+            var regionsDomain = dbContext.Regions.ToList();
 
-            return Ok(regions);
+            // Map domain models to DTOs (Data Transfer Objects)
+            var regionsDto = new List<RegionDto>();
+            foreach (var regionDomain in regionsDomain)
+            {
+                regionsDto.Add(new RegionDto()
+                {
+                    Id = regionDomain.Id,
+                    Code = regionDomain.Code,
+                    Name = regionDomain.Name,
+                    RegionImageUrl = regionDomain.RegionImageUrl,
+                });
+            }
+
+            // Retrun DTOs
+            return Ok(regionsDto);
         }
 
+        // GET SINGLE REGIONS
+        // GET: https://localhost:port/api/regions/{id}
         [HttpGet]
         [Route("{id:Guid}")]
         public IActionResult GetById([FromRoute] Guid id) 
         {
             //var region = dbContext.Regions.Find(id);
 
-            var region = dbContext.Regions.FirstOrDefault(r => r.Id == id);
+            // Get Region Domain Model from database
+            var regionDomain = dbContext.Regions.FirstOrDefault(r => r.Id == id);
 
             /*
                 Find(id) only takes primary key 
                 FirstOrDefault(r => r.Id == id) can compare with any value
             */
 
-            if (region == null)
+            if (regionDomain == null)
             {
                 return NotFound();
             }
-            return Ok(region);
+
+            // Map Region Domain Model to Region DTO
+            var regionDto = new RegionDto()
+            {
+                Id = regionDomain.Id,
+                Code = regionDomain.Code,
+                Name = regionDomain.Name,
+                RegionImageUrl = regionDomain.RegionImageUrl,
+            };
+
+            return Ok(regionDto);
         }
     }
 }
