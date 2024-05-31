@@ -96,12 +96,75 @@ namespace NZWalks.API.Controllers
             var regionDto = new RegionDto
             {
                 Id = regionDomainModel.Id,
-                Code=regionDomainModel.Code,
+                Code = regionDomainModel.Code,
                 Name = regionDomainModel.Name,
                 RegionImageUrl = regionDomainModel.RegionImageUrl,
             };
 
             return CreatedAtAction(nameof(GetById), new {id = regionDto.Id}, regionDto);
+        }
+
+        // PUT: UPDATE SINGLE REGION
+        // PUT: https://localhost:port/api/regions/{id}
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
+        {
+            // Check if region exists
+            var regionDomainModel = dbContext.Regions.FirstOrDefault(r => r.Id == id);
+            if (regionDomainModel == null)
+            {
+                return NotFound();
+            }
+
+            // Map DTO to Domain Model
+            regionDomainModel.Code = updateRegionRequestDto.Code;
+            regionDomainModel.Name = updateRegionRequestDto.Name;
+            regionDomainModel.RegionImageUrl = updateRegionRequestDto.RegionImageUrl;
+
+            dbContext.SaveChanges();
+
+            // Map Domain Model to DTO
+            var regionDto = new RegionDto
+            {
+                Id = regionDomainModel.Id,
+                Code = regionDomainModel.Code,
+                Name = regionDomainModel.Name,
+                RegionImageUrl = regionDomainModel.RegionImageUrl,
+            };
+
+            return Ok(regionDto);
+        }
+
+        // DELETE: DELETE SINGLE REGION
+        // DELETE: https://localhost:port/api/regions/{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public IActionResult Delete([FromRoute] Guid id)
+        {
+            var regionDomainModel = dbContext.Regions.FirstOrDefault(r => r.Id == id);
+            if (regionDomainModel == null)
+            {
+                var notFoundRes = new { success = false, error = "No Record Found", data = "" };
+                return NotFound(notFoundRes);
+            }
+
+            // Delete region
+            dbContext.Regions.Remove(regionDomainModel);
+            dbContext.SaveChanges();
+
+            // return deleted region back
+            // Map Domain Model to DTO
+            var regionDto = new RegionDto
+            {
+                Id = regionDomainModel.Id,
+                Code = regionDomainModel.Code,
+                Name = regionDomainModel.Name,
+                RegionImageUrl = regionDomainModel.RegionImageUrl,
+            };
+
+            var okRes = new { success = true, error = "", data = regionDto };
+            return Ok(okRes);
         }
     }
 }
