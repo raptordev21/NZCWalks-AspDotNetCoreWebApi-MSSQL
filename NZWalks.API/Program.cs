@@ -1,3 +1,8 @@
+// Project Dependencies:
+// Swashbuckle.AspNetCore
+// Microsoft.EntityFrameworkCore.Tools
+// Microsoft.EntityFrameworkCore.SqlServer
+
 using Microsoft.EntityFrameworkCore;
 using NZWalks.API.Data;
 
