@@ -70,5 +70,22 @@ namespace NZWalks.API.Controllers
             var walkDto = mapper.Map<WalkDto>(walkDomainModel);
             return Ok(walkDto);
         }
+
+        // DELETE: DELETE SINGLE WALK
+        // DELETE: https://localhost:port/api/walks/{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var walkDomainModel = await walkRepository.DeleteAsync(id);
+            if (walkDomainModel == null)
+            {
+                var notFoundRes = new { success = false, error = "No Record Found", data = "" };
+                return NotFound(notFoundRes);
+            }
+
+            var okRes = new { success = true, error = "", data = mapper.Map<WalkDto>(walkDomainModel) };
+            return Ok(okRes);
+        }
     }
 }
