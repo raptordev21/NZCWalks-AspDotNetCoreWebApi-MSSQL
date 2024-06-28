@@ -1,8 +1,13 @@
-// Project Dependencies:
-// Swashbuckle.AspNetCore
-// Microsoft.EntityFrameworkCore.Tools
-// Microsoft.EntityFrameworkCore.SqlServer
-// AutoMapper
+/* Project Dependencies:
+    Swashbuckle.AspNetCore
+    Microsoft.EntityFrameworkCore.Tools
+    Microsoft.EntityFrameworkCore.SqlServer
+    AutoMapper
+    Microsoft.AspNetCore.Authentication.JwtBearer
+    Microsoft.IdentityModel.Tokens
+    System.IdentityModel.Tokens.Jwt
+    Microsoft.AspNetCore.Identity.EntityFrameworkCore
+*/
 
 using Microsoft.EntityFrameworkCore;
 using NZWalks.API.Data;
