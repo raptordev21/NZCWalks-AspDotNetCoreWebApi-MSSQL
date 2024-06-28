@@ -36,7 +36,9 @@ namespace NZWalks.API.Repositories
             string? filterOn = null,
             string? filterQuery = null,
             string? sortBy = null,
-            bool isAscending = true)
+            bool isAscending = true,
+            int pageNumber = 1,
+            int pageSize = 5)
         {
             var walks = dbContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
 
@@ -62,7 +64,10 @@ namespace NZWalks.API.Repositories
                 }
             }
 
-            return await walks.ToListAsync();
+            // Pagination
+            var skipResults = (pageNumber - 1) * pageSize;
+
+            return await walks.Skip(skipResults).Take(pageSize).ToListAsync();
             // return await dbContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
             // type safe way : .Include(x => x.Difficulty)
         }
